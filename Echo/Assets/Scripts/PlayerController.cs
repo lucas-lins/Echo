@@ -5,46 +5,43 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D _rbCesar;
-    public  float       _spdCesar = 3;
-    private Vector2     _directionCesar;
-    private bool        _facingR = true;
+    private Animator _animatorCesar;
+    public float _spdCesar = 3;
+    private Vector2 _directionCesar;
+    private Vector2 _lastDirection; // Para armazenar a última direção de movimento
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         _rbCesar = GetComponent<Rigidbody2D>();
-        
+        _animatorCesar = GetComponent<Animator>();
+        _lastDirection = Vector2.down; // Direção padrão inicial
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Capturar a direção de movimento
         _directionCesar = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if((_directionCesar.x < 0) && (_facingR == true))
+        // Verificar se há movimento
+        if (_directionCesar.sqrMagnitude > 0)
         {
-            Flip();
+            _lastDirection = _directionCesar; // Atualiza a última direção quando o jogador está se movendo
+            _animatorCesar.SetInteger("IsMoving", 1);
+            _animatorCesar.SetFloat("MoveX", _directionCesar.x);
+            _animatorCesar.SetFloat("MoveY", _directionCesar.y);
         }
-
-        else if((_directionCesar.x > 0) && (_facingR == false))
+        else
         {
-            Flip();
+            _animatorCesar.SetInteger("IsMoving", 0);
+            _animatorCesar.SetFloat("MoveX", _lastDirection.x);
+            _animatorCesar.SetFloat("MoveY", _lastDirection.y);
         }
-        
     }
 
     void FixedUpdate()
     {
         _rbCesar.MovePosition(_rbCesar.position + _directionCesar * _spdCesar * Time.fixedDeltaTime);
 
-    }
-
-        private void Flip()
-    {
-        _facingR = !_facingR;
-        transform.Rotate(0, 180, 0);
     }
 
 }
