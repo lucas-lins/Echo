@@ -36,6 +36,17 @@ public class PlayerController : MonoBehaviour
             _animatorCesar.SetFloat("MoveX", _lastDirection.x);
             _animatorCesar.SetFloat("MoveY", _lastDirection.y);
         }
+
+        //Mecanica de corrida
+        if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.K)) 
+        {
+            _spdCesar = 7;
+        }
+
+        else
+        {
+            _spdCesar = 3;
+        }
     }
 
     void FixedUpdate()
