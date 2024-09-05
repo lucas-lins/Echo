@@ -21,8 +21,19 @@ public class PlayerController : MonoBehaviour
     {
         // Capturar a direção de movimento
         _directionCesar = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        IsMoving();       
+        IsRunning();       
+    }
 
-        // Verificar se há movimento
+    void FixedUpdate()
+    {
+        _rbCesar.MovePosition(_rbCesar.position + _directionCesar * _spdCesar * Time.fixedDeltaTime);
+
+    }
+
+    void IsMoving()
+    {
+         // Verificar se há movimento
         if (_directionCesar.sqrMagnitude > 0)
         {
             _lastDirection = _directionCesar; // Atualiza a última direção quando o jogador está se movendo
@@ -36,7 +47,10 @@ public class PlayerController : MonoBehaviour
             _animatorCesar.SetFloat("MoveX", _lastDirection.x);
             _animatorCesar.SetFloat("MoveY", _lastDirection.y);
         }
+    }
 
+    void IsRunning()
+    {
         //Mecanica de corrida
         if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.K)) 
         {
@@ -47,12 +61,6 @@ public class PlayerController : MonoBehaviour
         {
             _spdCesar = 3;
         }
-    }
-
-    void FixedUpdate()
-    {
-        _rbCesar.MovePosition(_rbCesar.position + _directionCesar * _spdCesar * Time.fixedDeltaTime);
-
     }
 
 }

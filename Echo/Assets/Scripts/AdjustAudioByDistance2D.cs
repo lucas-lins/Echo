@@ -7,7 +7,7 @@ public class AdjustAudioByDistance2D : MonoBehaviour
 {
     public Transform _player; // Referência ao jogador
     private AudioSource _audioSource;
-    public float _maxDistance = 30f; // Distância máxima onde o som é audível
+    public float _maxDistance = 40f; // Distância máxima onde o som é audível
 
     void Start()
     {
