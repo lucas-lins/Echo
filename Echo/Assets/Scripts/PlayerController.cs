@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 _directionCesar;
     private Vector2 _lastDirection; // Para armazenar a última direção de movimento
 
+    private GameObject _currentInteractable; // Para armazenar o objeto que pode ser interagido
+
     void Start()
     {
         _rbCesar = GetComponent<Rigidbody2D>();
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
         _directionCesar = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         IsMoving();       
         IsRunning();       
+        IsInteracting();
     }
 
     void FixedUpdate()
@@ -60,6 +63,41 @@ public class PlayerController : MonoBehaviour
         else
         {
             _spdCesar = 3;
+        }
+    }
+
+    void IsInteracting()
+    {
+        // Verifica se a tecla espaço foi pressionada e há um objeto próximo para interagir
+        if (Input.GetKeyDown(KeyCode.Space) && _currentInteractable != null)
+        {
+            // Aqui você pode chamar uma função de interação do objeto
+            Debug.Log("Interagindo com: " + _currentInteractable.name);
+            // Exemplo de interação: 
+            // _currentInteractable.GetComponent<Interactable>().Interact();
+        }
+    }
+
+    // Detecta quando o jogador entra na área de um objeto interagível
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Interactable"))
+        {
+            _currentInteractable = other.gameObject;
+            Debug.Log("Pode interagir com: " + other.name);
+        }
+    }
+
+    // Detecta quando o jogador sai da área do objeto
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Interactable"))
+        {
+            if (_currentInteractable == other.gameObject)
+            {
+                _currentInteractable = null;
+                Debug.Log("Saiu da área de interação com: " + other.name);
+            }
         }
     }
 
